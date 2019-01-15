@@ -11,9 +11,7 @@ import Module from '../core/module';
 let debug = logger('quill:keyboard');
 
 const SHORTKEY =
-  typeof navigator !== "undefined" && /Mac/i.test(navigator.platform)
-    ? 'metaKey' :
-      'ctrlKey';
+  typeof navigator !== "undefined" && /Mac/i.test(navigator.platform) ? 'metaKey' : 'ctrlKey';
 
 
 class Keyboard extends Module {
