@@ -18,15 +18,18 @@ let debug = logger('quill:clipboard');
 
 const DOM_KEY = '__ql-matcher';
 
+const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
+
 const CLIPBOARD_CONFIG = [
-  [Node.TEXT_NODE, matchText],
-  [Node.TEXT_NODE, matchNewline],
+  [TEXT_NODE, matchText],
+  [TEXT_NODE, matchNewline],
   ['br', matchBreak],
-  [Node.ELEMENT_NODE, matchNewline],
-  [Node.ELEMENT_NODE, matchBlot],
-  [Node.ELEMENT_NODE, matchSpacing],
-  [Node.ELEMENT_NODE, matchAttributor],
-  [Node.ELEMENT_NODE, matchStyles],
+  [ELEMENT_NODE, matchNewline],
+  [ELEMENT_NODE, matchBlot],
+  [ELEMENT_NODE, matchSpacing],
+  [ELEMENT_NODE, matchAttributor],
+  [ELEMENT_NODE, matchStyles],
   ['li', matchIndent],
   ['b', matchAlias.bind(matchAlias, 'bold')],
   ['i', matchAlias.bind(matchAlias, 'italic')],
@@ -127,10 +130,10 @@ class Clipboard extends Module {
     this.matchers.forEach((pair) => {
       let [selector, matcher] = pair;
       switch (selector) {
-        case Node.TEXT_NODE:
+        case TEXT_NODE:
           textMatchers.push(matcher);
           break;
-        case Node.ELEMENT_NODE:
+        case ELEMENT_NODE:
           elementMatchers.push(matcher);
           break;
         default:
@@ -168,7 +171,7 @@ function applyFormat(delta, format, value) {
 }
 
 function computeStyle(node) {
-  if (node.nodeType !== Node.ELEMENT_NODE) return {};
+  if (node.nodeType !== ELEMENT_NODE) return {};
   const DOM_KEY = '__ql-computed-style';
   return node[DOM_KEY] || (node[DOM_KEY] = window.getComputedStyle(node));
 }
@@ -190,14 +193,14 @@ function isLine(node) {
 }
 
 function traverse(node, elementMatchers, textMatchers) {  // Post-order
-  if (node.nodeType === node.TEXT_NODE) {
+  if (node.nodeType === TEXT_NODE) {
     return textMatchers.reduce(function(delta, matcher) {
       return matcher(node, delta);
     }, new Delta());
-  } else if (node.nodeType === node.ELEMENT_NODE) {
+  } else if (node.nodeType === ELEMENT_NODE) {
     return [].reduce.call(node.childNodes || [], (delta, childNode) => {
       let childrenDelta = traverse(childNode, elementMatchers, textMatchers);
-      if (childNode.nodeType === node.ELEMENT_NODE) {
+      if (childNode.nodeType === ELEMENT_NODE) {
         childrenDelta = elementMatchers.reduce(function(childrenDelta, matcher) {
           return matcher(childNode, childrenDelta);
         }, childrenDelta);

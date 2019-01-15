@@ -126,7 +126,8 @@ module.exports = function(env) {
       port: process.env.npm_package_config_ports_webpack,
       stats: 'minimal',
       disableHostCheck: true
-    }
+    },
+    target: "node"
   };
 
   if (env && env.dev) {

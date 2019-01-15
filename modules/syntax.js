@@ -68,7 +68,7 @@ class Syntax extends Module {
 }
 Syntax.DEFAULTS = {
   highlight: (function() {
-    if (window.hljs == null) return null;
+    if (typeof window === "undefined" || window.hljs == null) return null;
     return function(text) {
       let result = window.hljs.highlightAuto(text);
       return result.value;

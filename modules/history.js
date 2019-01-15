@@ -19,7 +19,7 @@ class History extends Module {
     });
     this.quill.keyboard.addBinding({ key: 'Z', shortKey: true }, this.undo.bind(this));
     this.quill.keyboard.addBinding({ key: 'Z', shortKey: true, shiftKey: true }, this.redo.bind(this));
-    if (/Win/i.test(navigator.platform)) {
+    if (typeof navigator !== "undefined" && /Win/i.test(navigator.platform)) {
       this.quill.keyboard.addBinding({ key: 'Y', shortKey: true }, this.redo.bind(this));
     }
   }
