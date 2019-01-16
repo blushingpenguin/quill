@@ -1,14 +1,16 @@
-let elem = document.createElement('div');
-elem.classList.toggle('test-class', false);
-if (elem.classList.contains('test-class')) {
-  let _toggle = DOMTokenList.prototype.toggle;
-  DOMTokenList.prototype.toggle = function(token, force) {
-    if (arguments.length > 1 && !this.contains(token) === !force) {
-      return force;
-    } else {
-      return _toggle.call(this, token);
-    }
-  };
+if (typeof document !== "undefined") {
+  let elem = document.createElement('div');
+  elem.classList.toggle('test-class', false);
+  if (elem.classList.contains('test-class')) {
+    let _toggle = DOMTokenList.prototype.toggle;
+    DOMTokenList.prototype.toggle = function(token, force) {
+      if (arguments.length > 1 && !this.contains(token) === !force) {
+        return force;
+      } else {
+        return _toggle.call(this, token);
+      }
+    };
+  }
 }
 
 if (!String.prototype.startsWith) {
@@ -55,9 +57,11 @@ if (!Array.prototype.find) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  // Disable resizing in Firefox
-  document.execCommand("enableObjectResizing", false, false);
-  // Disable automatic linkifying in IE11
-  document.execCommand("autoUrlDetect", false, false);
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", function() {
+    // Disable resizing in Firefox
+    document.execCommand("enableObjectResizing", false, false);
+    // Disable automatic linkifying in IE11
+    document.execCommand("autoUrlDetect", false, false);
+  });
+}
