@@ -10,7 +10,7 @@ import Module from '../core/module';
 
 let debug = logger('quill:keyboard');
 
-const SHORTKEY = /Mac/i.test(navigator.platform) ? 'metaKey' : 'ctrlKey';
+const SHORTKEY = typeof navigator !== "undefined" && /Mac/i.test(navigator.platform) ? 'metaKey' : 'ctrlKey';
 
 
 class Keyboard extends Module {
@@ -39,7 +39,7 @@ class Keyboard extends Module {
     });
     this.addBinding({ key: Keyboard.keys.ENTER, shiftKey: null }, handleEnter);
     this.addBinding({ key: Keyboard.keys.ENTER, metaKey: null, ctrlKey: null, altKey: null }, function() {});
-    if (/Firefox/i.test(navigator.userAgent)) {
+    if (typeof(navigator) !== "undefined" && /Firefox/i.test(navigator.userAgent)) {
       // Need to handle delete and backspace for Firefox in the general case #1171
       this.addBinding({ key: Keyboard.keys.BACKSPACE }, { collapsed: true }, handleBackspace);
       this.addBinding({ key: Keyboard.keys.DELETE }, { collapsed: true }, handleDelete);
